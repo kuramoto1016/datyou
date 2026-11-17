@@ -34,6 +34,13 @@
 - ステージ構成、バランス数値、演出、UI、コード構成は自分で決めてよい。決めた理由をPRに書く
 - 新しい命令の追加、ゲームオーバー条件の変更など、上の「仕様」に関わる変更はしない。`TODO.md` の「要相談」に書いて止める
 
+## GitHubの操作
+- `gh pr list` などGraphQLを使うコマンドは使えない。REST APIを `gh api` で使う
+  - PR一覧：`gh api repos/kuramoto1016/datyou/pulls?state=open`
+  - PRのコメント：`gh api repos/kuramoto1016/datyou/issues/<番号>/comments` と `gh api repos/kuramoto1016/datyou/pulls/<番号>/comments`
+  - PR作成：`gh api repos/kuramoto1016/datyou/pulls -f title=... -f head=<ブランチ> -f base=main -f body=...`
+- 既存PRへの修正は、そのPRのブランチに追加コミットしてpushする
+
 ## 技術メモ
 - アセットは使わず、プリミティブとコード生成で作る（後で差し替えやすいように見た目の生成は1か所にまとめる）
 - 入力はキーボードとスワイプの両方に対応させる
