@@ -52,24 +52,24 @@ public class PsychicController : MonoBehaviour
         }
     }
 
-    // ---------- 入力（キーボード＋スワイプ） ----------
+    // ---------- 入力（キーボード＋スワイプ。実際の読み取りは GameInput） ----------
 
     bool TryReadCommand(out OstrichCommand cmd)
     {
         cmd = OstrichCommand.Stay;
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) { cmd = OstrichCommand.Left; return true; }
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) { cmd = OstrichCommand.Right; return true; }
-        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) { cmd = OstrichCommand.Jump; return true; }
-        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) { cmd = OstrichCommand.Stay; return true; }
+        if (GameInput.LeftPressed) { cmd = OstrichCommand.Left; return true; }
+        if (GameInput.RightPressed) { cmd = OstrichCommand.Right; return true; }
+        if (GameInput.JumpPressed) { cmd = OstrichCommand.Jump; return true; }
+        if (GameInput.StayPressed) { cmd = OstrichCommand.Stay; return true; }
 
         // スマホ：左右スワイプ＝レーン移動、上スワイプ＝ジャンプ、タップ＝「そのまま！」
         // （マウスでもエディタ上で試せる）
-        if (Input.GetMouseButtonDown(0)) { touchStart = Input.mousePosition; touching = true; }
-        if (touching && Input.GetMouseButtonUp(0))
+        if (GameInput.PointerDown) { touchStart = GameInput.PointerPosition; touching = true; }
+        if (touching && GameInput.PointerUp)
         {
             touching = false;
-            Vector2 delta = (Vector2)Input.mousePosition - touchStart;
+            Vector2 delta = GameInput.PointerPosition - touchStart;
             if (delta.magnitude < swipeMinPixels) { cmd = OstrichCommand.Stay; return true; }
             if (Mathf.Abs(delta.x) > Mathf.Abs(delta.y))
                 cmd = delta.x < 0 ? OstrichCommand.Left : OstrichCommand.Right;

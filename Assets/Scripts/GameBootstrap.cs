@@ -66,7 +66,7 @@ public class GameBootstrap : MonoBehaviour
         cam.transform.position = new Vector3(p.x * 0.5f, CamHeight, p.z - CamBack);
         cam.transform.LookAt(new Vector3(p.x * 0.5f, 1f, p.z + 6f));
 
-        if (gameOver && (Input.GetKeyDown(KeyCode.R) || Input.GetMouseButtonDown(0)))
+        if (gameOver && (GameInput.RetryKeyPressed || GameInput.PointerDown))
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

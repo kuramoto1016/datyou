@@ -23,7 +23,7 @@
    - 保存場所は **どこでもいい**（例：`Desktop/datyou-tmp`）
 3. 作ったプロジェクトをいったん閉じて、そのフォルダの中の `Packages/` と `ProjectSettings/` を、クローンした `datyou/` フォルダにコピーする
 4. Unity Hub で「追加」→「ディスクから加える」→ クローンした `datyou/` フォルダを選んで開く
-5. Edit → Project Settings → Player → Other Settings →「**Active Input Handling**」を「**Both**」にする（再起動を求められたら再起動）
+5. （不要になりました）Active Input Handling は既定のままでOK。新Input System／旧Input Manager／Both のどれでも動きます
 6. `Packages/` と `ProjectSettings/` をコミットしてpushする
    ```
    git add Packages ProjectSettings
@@ -50,7 +50,7 @@
 スワイプはエディタ上ではマウスのドラッグで試せます。
 
 ### よくあるトラブル
-- **再生すると `InvalidOperationException` が出て操作できない** → 上の手順5（Active Input Handling = Both）をやる
+- **再生すると `InvalidOperationException` が出て操作できない** → 古いブランチのコードかもしれない。`main` を最新にする。それでも出る場合はエラー全文をPRかIssueに貼ってください
 - **`FindObjectOfType` が古いという黄色い警告** → 動作には影響なし
 - **オブジェクトがピンク色** → シェーダーが見つかっていない。Issue かPRコメントでUnityのバージョンを教えてください
 
