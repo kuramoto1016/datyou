@@ -51,7 +51,9 @@ public class GameBootstrap : MonoBehaviour
         cam.tag = "MainCamera";
         cam.backgroundColor = new Color(0.6f, 0.8f, 1f);
         cam.clearFlags = CameraClearFlags.SolidColor;
-        if (FindObjectOfType<Light>() == null)
+        // FindObjectOfType は Unity 2023.1 以降で非推奨。「どれか1つあれば良い」ので
+        // 並べ替えをしない FindAnyObjectByType を使う（2021.3.18 / 2022.2 以降で使える）
+        if (FindAnyObjectByType<Light>() == null)
         {
             var l = new GameObject("Sun").AddComponent<Light>();
             l.type = LightType.Directional;
