@@ -3,7 +3,6 @@
 上から順に1つずつ実装する。完了したら `[x]` にする。
 
 ## 次にやること
-- [ ] 入力を新旧Input Systemの両方で動くようにする（`ENABLE_INPUT_SYSTEM` / `ENABLE_LEGACY_INPUT_MANAGER` で分岐）。Active Input Handlingの設定を変えなくても動くように
 - [ ] `FindObjectOfType` を `FindFirstObjectByType` に置き換える（Unity 6の警告対策）
 - [ ] 追っ手を追加する：後ろからドローンが迫ってくる。ダチョウが遅れる（障害物に当たる）と距離が縮まり、追いつかれたらゲームオーバー演出
 - [ ] ダチョウの「命令中／本能」を見た目で分かるようにする（命令中は頭上に念のエフェクト、残り時間のリング）
@@ -15,9 +14,11 @@
 - [ ] 効果音とBGMの仮実装（コード生成の簡単な音）
 - [ ] HUDをOnGUIからCanvasに置き換える
 - [ ] スマホのセーフエリアと縦画面対応
+- [ ] 新Input Systemでのタップ取りこぼし対策（1フレーム内で押して離したタップを拾えるか実機で確認し、必要ならタッチを個別に読む）
 
 ## 要相談（Kuraの判断待ち）
 - （まだなし）
 
 ## 完了
+- [x] 入力を新旧Input Systemの両方で動くようにする（`ENABLE_INPUT_SYSTEM` / `ENABLE_LEGACY_INPUT_MANAGER` で分岐）。Active Input Handlingの設定を変えなくても動くように
 - [x] プロトタイプ：3レーン、2秒で命令を忘れるダチョウAI、ハゲ度、体力の自然回復、罠エサ
