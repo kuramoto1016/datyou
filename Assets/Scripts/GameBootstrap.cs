@@ -9,6 +9,7 @@ public class GameBootstrap : MonoBehaviour
 {
     OstrichController ostrich;
     PsychicController psychic;
+    PursuerDrone pursuer;
     Camera cam;
     bool gameOver;
     float best;
@@ -44,6 +45,10 @@ public class GameBootstrap : MonoBehaviour
         // コース
         var spawner = new GameObject("Track").AddComponent<TrackSpawner>();
         spawner.target = body.transform;
+
+        // 追っ手（後ろから迫るドローン）
+        pursuer = new GameObject("Pursuer").AddComponent<PursuerDrone>();
+        pursuer.ostrich = ostrich;
 
         // カメラ・ライト
         cam = Camera.main;
@@ -94,8 +99,23 @@ public class GameBootstrap : MonoBehaviour
         Bar(new Rect(20 * s, 60 * s, 300 * s, 22 * s), ostrich.Hp / ostrich.maxHp, new Color(0.3f, 0.85f, 0.3f), "ダチョウ体力", s);
         Bar(new Rect(20 * s, 92 * s, 300 * s, 22 * s), psychic.Baldness01, new Color(0.95f, 0.6f, 0.5f), "頭ダチョウ度", s);
 
+        if (pursuer != null)
+        {
+            Color gapColor = pursuer.InDanger ? new Color(0.95f, 0.25f, 0.25f) : new Color(0.5f, 0.6f, 0.95f);
+            Bar(new Rect(20 * s, 124 * s, 300 * s, 22 * s), pursuer.Gap01, gapColor, $"追っ手との距離 {pursuer.Gap:0}m", s);
+        }
+
         string mode = ostrich.IsCommanded ? $"命令中… 忘れるまで {ostrich.CommandTimeLeft:0.0}s" : "本能で走ってる";
-        GUI.Label(new Rect(20 * s, 124 * s, 600 * s, 40 * s), mode, label);
+        GUI.Label(new Rect(20 * s, 156 * s, 600 * s, 40 * s), mode, label);
+
+        if (!gameOver && pursuer != null && pursuer.InDanger)
+        {
+            var warn = new GUIStyle(label) { fontSize = (int)(40 * s), alignment = TextAnchor.MiddleCenter };
+            warn.normal.textColor = new Color(0.9f, 0.1f, 0.1f);
+            // 点滅
+            if (Mathf.Repeat(Time.time * 3f, 1f) > 0.35f)
+                GUI.Label(new Rect(0, Screen.height * 0.18f, Screen.width, 60 * s), "ドローン接近中！", warn);
+        }
 
         if (gameOver)
         {
@@ -103,7 +123,9 @@ public class GameBootstrap : MonoBehaviour
             var mid = new GUIStyle(label) { fontSize = (int)(30 * s), alignment = TextAnchor.MiddleCenter };
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "");
             string title = psychic.IsOstrichHead ? "クエ？" : "捕まった…";
-            string sub = psychic.IsOstrichHead ? "念を使いすぎて頭がダチョウになった" : "ダチョウの体力が尽きた";
+            string sub = psychic.IsOstrichHead ? "念を使いすぎて頭がダチョウになった"
+                       : (pursuer != null && pursuer.KilledOstrich) ? "ドローンの捕獲ビームでダチョウが倒れた"
+                       : "ダチョウの体力が尽きた";
             GUI.Label(new Rect(0, Screen.height * 0.35f, Screen.width, 90 * s), title, big);
             GUI.Label(new Rect(0, Screen.height * 0.35f + 90 * s, Screen.width, 50 * s), sub, mid);
             GUI.Label(new Rect(0, Screen.height * 0.35f + 150 * s, Screen.width, 50 * s), $"{ostrich.Distance:0} m 逃げた　R / タップでリトライ", mid);

@@ -45,6 +45,8 @@ public class OstrichController : MonoBehaviour
     public float Distance => transform.position.z - startZ;
 
     public event Action OnDeath;
+    /// 障害物に当たったとき（追っ手が距離を詰めるのに使う）
+    public event Action OnHit;
 
     int lane;                 // -1:左 0:中央 1:右
     float commandTimer;
@@ -206,13 +208,21 @@ public class OstrichController : MonoBehaviour
         if (other.TryGetComponent<Hazard>(out _))
         {
             if (invincibleTimer > 0f) return;
-            Hp -= hitDamage;
-            invincibleTimer = invincibleTime;
-            if (Hp <= 0f)
-            {
-                Hp = 0f;
-                Kill();
-            }
+            ApplyDamage(hitDamage);
+            OnHit?.Invoke();
+        }
+    }
+
+    /// ダメージを受ける（無敵時間を張り直す）。体力0で倒れる
+    public void ApplyDamage(float damage)
+    {
+        if (!Alive) return;
+        Hp -= damage;
+        invincibleTimer = invincibleTime;
+        if (Hp <= 0f)
+        {
+            Hp = 0f;
+            Kill();
         }
     }
 
